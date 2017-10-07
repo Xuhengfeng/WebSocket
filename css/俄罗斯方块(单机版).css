@@ -1,0 +1,73 @@
+/**
+ * 俄罗斯方块(单机版).css
+ */
+
+/**
+ * 左边大容器
+ */
+.game{
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	width: 200px;
+	height: 400px;
+	background-color: #f2faff;
+	border-left: 1px solid blue;
+	border-right: 1px solid blue;
+	border-bottom: 1px solid blue;
+}
+
+/**
+ * 右边小容器
+ */
+.next{
+	position: absolute;
+	top: 10px;
+	left: 250px;
+	border: 1px solid blue;
+	width: 80px;
+	height: 80px;
+	background-color: #f2faff;
+}
+
+/**
+ * 显示文本
+ */
+.info{
+	position: absolute;
+	top: 100px;
+	left: 250px;
+}
+
+/**
+ * 定义每个小方块为绝对定位
+ */
+.none,.current,.done{
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	box-sizing: border-box;
+}
+
+/**
+ * 已经存在大容器内的方块
+ */
+.none{
+	background-color: #f2faff;
+}
+
+/**
+ * 右边存在小容器内的方块
+ */
+.current{
+	background-color: pink;
+	border: 1px solid red;
+}
+
+/**
+ * 开始下落的方块
+ */
+.done{
+	background-color: gray;
+	border: 1px solid black;
+}
