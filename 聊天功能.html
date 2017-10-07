@@ -35,10 +35,11 @@
 				console.log('ws close');
 			}
 			
-			//监听发送消息
+			//监听后台返回的消息
 			ws.onmessage = function (e) {
 				console.log(e);
-				showMessage(e.data);
+				let mes = JSON.parse(e.data);
+				showMessage(mes.data, mes.type);
 			}
 			
 			//点击发送
@@ -50,9 +51,14 @@
 			}
 			
 			//添加内容到body
-			function showMessage(str) {
+			function showMessage(str,type) {
 				let div = document.createElement('div');
 				div.innerHTML = str;
+				if (type === 'enter') {
+					div.style.color = 'blue';
+				} else if (type === 'left') {
+					div.style.color = 'red';
+				}
 				document.body.appendChild(div);
 			}
 			

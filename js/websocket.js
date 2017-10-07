@@ -1,25 +1,40 @@
+/**
+* 徐横峰 
+* 启动本地服务器   node websocket.js 
+* 2017.08.30
+**/
 'use strict';
  
 const PORT = 3000;
 let clientCount = 0;//客户端 数量
 
-var ws = require("nodejs-websocket");
+let ws = require("nodejs-websocket");
 
-var server = ws.createServer(function (conn) {
+let server = ws.createServer(function (conn) {
     console.log("New connection")
     clientCount++;
     conn.nickName = 'user' + clientCount;
-    broadcast(conn.nickName + 'come in');//对每个客户端进行消息的广播!
+    let mes = {};
+    mes.type = 'enter';
+    mes.data = conn.nickName + 'comes in';
+    broadcast(JSON.stringify(mes));//对刚进来的每个客户端进行消息的广播!
     
+    //监听前端 发送消息str事件
     conn.on("text", function (str) {
         console.log("Received "+str)
-        broadcast(str);
-//      conn.sendText(str.toUpperCase()+"!!!")
+        let mes = {};
+        mes.type = "message";
+        mes.data = conn.nickName +'says: ' + str;
+        broadcast(JSON.stringify(mes));
     })
     
+    //监听前端 关闭事件
     conn.on("close", function (code, reason) {
         console.log("Connection closed")
-        broadcast(conn.nickName + 'left');
+        let mes = {};
+        mes.type = "left";
+        mes.data = conn.nickName + 'left';
+        broadcast(JSON.stringify(mes));
         clientCount--;
     })
     
@@ -29,6 +44,7 @@ var server = ws.createServer(function (conn) {
     
 }).listen(PORT);
 
+//在服务端打印log输出
 console.log('websocket server listen on port:'+PORT)
 
 
