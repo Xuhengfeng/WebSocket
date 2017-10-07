@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+		<script>
+			'use strict';
+		  	var socket = io.connect('ws://localhost:3000');
+		  		socket.on('news', function (data) {
+		    	console.log(data);
+		    	socket.emit('my other event', { my: 'data' });//派发事件到后端
+		  	});
+		</script>
+		
+	</body>
+</html>

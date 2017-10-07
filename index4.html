@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<h1>Chat Room</h1>
+		<input id="sendTxt" type="text" />
+		<button id="sendBtn">发送</button>
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+		<script>
+			'use strict';
+			//获取dom
+			let sendTxt = document.getElementById('sendTxt');
+			let sendBtn = document.getElementById('sendBtn');
+			
+			//回车发送
+			sendTxt.onkeydown = function (e) {
+				let event = e || window.event;
+				if (event.keyCode === 13) {
+					sendBtn.onclick();
+				}
+			}
+			
+			let socket = io('ws://localhost:3000');
+			//添加内容到body
+			function showMessage(str,type) {
+				let div = document.createElement('div');
+				div.innerHTML = str;
+				if (type === 'enter') {
+					div.style.color = 'blue';
+				} else if (type === 'left') {
+					div.style.color = 'red';
+				}
+				document.body.appendChild(div);
+			}
+			
+		 	//点击发送
+			sendBtn.onclick = function () {
+				let txt = sendTxt.value;
+				if (txt) {
+					socket.emit('message', txt);
+				}
+			}
+			
+			//监听进入
+			socket.on('enter', (data) => {
+				showMessage(data, 'enter');
+			})
+			
+			//监听消息
+			socket.on('message', (data) => {
+				showMessage(data, 'message');
+			})
+			
+			//监听离开
+			socket.on('left', (data) => {
+				showMessage(data, 'left');
+			})
+		  
+		</script>
+		
+	</body>
+</html>
