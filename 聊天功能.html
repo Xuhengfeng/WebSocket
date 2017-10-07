@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<h1>Chat Room</h1>
+		<input id="sendTxt" type="text" />
+		<button id="sendBtn">发送</button>
+		<script>
+			'use strict';
+			//获取dom
+			let sendTxt = document.getElementById('sendTxt');
+			let sendBtn = document.getElementById('sendBtn');
+			
+			//回车发送
+			sendTxt.onkeydown = function (e) {
+				let event = e || window.event;
+				if (event.keyCode === 13) {
+					sendBtn.onclick();
+				}
+			}
+			
+			let ws = new WebSocket('ws://localhost:3000');
+			
+			//监听打开
+			ws.onopen = function () {
+				console.log('ws open');
+				sendBtn.onclick();
+			}
+			
+			//监听关闭
+			ws.onclose = function () {
+				console.log('ws close');
+			}
+			
+			//监听发送消息
+			ws.onmessage = function (e) {
+				console.log(e);
+				showMessage(e.data);
+			}
+			
+			//点击发送
+			sendBtn.onclick = function () {
+				let txt = sendTxt.value;
+				if (txt) {
+					ws.send(txt);
+				}
+			}
+			
+			//添加内容到body
+			function showMessage(str) {
+				let div = document.createElement('div');
+				div.innerHTML = str;
+				document.body.appendChild(div);
+			}
+			
+		</script>
+	</body>
+</html>

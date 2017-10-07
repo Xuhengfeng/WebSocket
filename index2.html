@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<h1>Echo Test</h1>
+		<input id="sendTxt" type="text" /><button id="sendBtn">发送</button>
+		<div id="recv"></div>
+		<script>
+			'use strict';
+			let websocket = new WebSocket('ws://localhost:3000');
+			websocket.onopen = function () {
+				console.log('websocket open')
+				console.log(websocket)
+				document.getElementById('recv').innerHTML = 'Connected';
+			}
+			websocket.onclose = function () {
+				console.log('websocket close')	
+				console.log(websocket)
+			}
+			websocket.onmessage = function (e) {
+				console.log(e.data)
+				document.getElementById('recv').innerHTML = e.data;
+			}
+			document.getElementById('sendBtn').onclick = function () {
+				let txt = document.getElementById('sendTxt').value;
+				websocket.send(txt);
+			}
+			document.getElementById('sendTxt').onkeydown = function (e) {
+				if (e.keyCode === 13) {				
+					document.getElementById('sendBtn').onclick();
+				}
+			}
+		</script>
+	</body>
+</html>
